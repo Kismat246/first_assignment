@@ -3,6 +3,28 @@
 # include <algorithm>
 using namespace std;
 
+class Node{
+    public:
+    string value;
+    Node* next;
+    Node* prev;
+
+    Node(string value){
+        this->value = value;
+        next = nullptr;
+        prev = nullptr;
+    }
+};
+
+class LinkedList{
+    
+};
+
+
+class Stack {
+
+};
+
 void getInput()
 {
 
@@ -10,11 +32,14 @@ void getInput()
     string input;
     string shouldContinue;
 
-    while (stop == false)
+    while (!stop)
     {
         cout << "Enter a number of brackets: ";
         cin >> input;
         cout << "Your input is " << input << endl;
+
+        
+
         cout << "Do  you want to continue? Yes/No: ";
         cin >> shouldContinue;
 
