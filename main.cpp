@@ -21,25 +21,20 @@ public:
 class LinkedList
 {
 public:
-    int nodes, maxNodes;
+    int nodes;
     Node *head, *tail;
 
-    LinkedList(int maxNodes)
+    LinkedList()
     {
         this->head = nullptr;
         this->tail = nullptr;
-        this->maxNodes = maxNodes;
         this->nodes = 0;
     }
 
+    // returns the number of nodes present in the linked list
     int size()
     {
         return this->nodes;
-    }
-
-    int capacity()
-    {
-        return this->maxNodes;
     }
 
     bool empty()
@@ -47,60 +42,43 @@ public:
         return this->nodes == 0;
     }
 
-    bool full()
+    // adds a new node in the last of the linked list
+    void insertTail(char bracket)
     {
-        return this->nodes >= maxNodes;
-    }
 
-    void insertHead(Node *newNode)
-    {
-        if (!full())
+        Node *newNode = new Node(bracket);
+        if (size() == 0)
         {
-            if (size() == 0)
-            {
-                head = newNode;
-                tail = newNode;
-            }
-            else
-            {
-                head->prev = newNode;
-                newNode->next = head;
-                head = newNode;
-            }
-            nodes++;
+
+            head = newNode;
+            tail = newNode;
         }
         else
         {
-            cout << "Insert called when linked list full\n";
+
+            tail->next = newNode;
+            newNode->prev = tail;
+            tail = newNode;
         }
+        nodes++;
     }
 
-    void insertTail(Node *newNode)
+    // removes the most recent node added in the list, which is the last node
+    char deleteTail()
     {
-        if (!full())
-        {
-            if (size() == 0)
-            {
-                head = newNode;
-                tail = newNode;
-            }
-            else
-            {
-                tail->next = newNode;
-                newNode->prev = tail;
-                tail = newNode;
-            }
-            nodes++;
-        }
-        else
-        {
-            cout << "Insert called when linked list full\n";
-        }
+        Node *temp = tail;
+        char tempValue = temp->value;
+        temp->prev->next = nullptr;
+        tail = temp;
+        delete temp;
+        return tempValue;
     }
 
-    void display(){
-        Node* temp = head;
-        while(temp != nullptr){
+    void display()
+    {
+        Node *temp = head;
+        while (temp != nullptr)
+        {
             cout << temp->value << "->";
             temp = temp->next;
         }
@@ -110,6 +88,55 @@ public:
 
 class Stack
 {
+private:
+    LinkedList list;
+
+public:
+    // adds item on the stack
+    void push(char bracket)
+    {
+        list.insertTail(bracket);
+    }
+
+    // deletes item from the stack
+    void pop()
+    {
+    }
+
+    // checks if the stack is empty or not
+    bool isEmpty()
+    {
+    }
+
+    // checks if the stack is full or not
+    bool isFull()
+    {
+    }
+
+    void display()
+    {
+        list.display();
+    }
+};
+
+class StackParenthesesChecker
+{
+private:
+    Stack stack;
+
+public:
+    void push(string input)
+    {
+        for (char c : input)
+        {
+            stack.push(c);
+        }
+    }
+
+    void display()
+    {
+        stack.display();
+    }
 };
 
 void getInput()
@@ -118,25 +145,22 @@ void getInput()
     bool stop = false;
     string input;
     string shouldContinue;
+    StackParenthesesChecker stackParenthesesChecker;
 
     while (!stop)
     {
-        LinkedList list(10);
+        LinkedList list;
 
         cout << "Enter a number of brackets: ";
         cin >> input;
-        // cout << "Your input is " << input << endl;
+        cout << "Your input is " << input << endl;
 
-        for (char c : input)
-        {
-            Node *newNode = new Node(c);
-            list.insertTail(newNode);
-        }
+        stackParenthesesChecker.push(input);
 
-        cout << "Linked list content: ";
-        list.display();
+        stackParenthesesChecker.display();
 
-        cout << "Do  you want to continue? Yes/No: ";
+        cout
+            << "Do  you want to continue? Yes/No: ";
         cin >> shouldContinue;
 
         transform(shouldContinue.begin(), shouldContinue.end(), shouldContinue.begin(), ::tolower);
