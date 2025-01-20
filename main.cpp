@@ -37,8 +37,10 @@ public:
         return this->nodes;
     }
 
-    bool empty()
+    // checks if the linked list is empty or not
+    bool isEmpty()
     {
+        cout << "node value: " << nodes << endl;
         return this->nodes == 0;
     }
 
@@ -64,14 +66,25 @@ public:
     }
 
     // removes the most recent node added in the list, which is the last node
-    char deleteTail()
+    void deleteTail()
     {
         Node *temp = tail;
-        char tempValue = temp->value;
-        temp->prev->next = nullptr;
-        tail = temp;
-        delete temp;
-        return tempValue;
+        if (temp != nullptr)
+        {
+            cout << "tail: " << temp << " temp value: " << temp->value << endl;
+        }
+
+        if (!isEmpty())
+        {
+            cout << "link list is not empty" << endl;
+            if (nodes > 1)
+            {
+                temp->prev->next = nullptr;
+                tail = temp->prev;
+            }
+            delete temp;
+            nodes--;
+        }
     }
 
     void display()
@@ -83,6 +96,7 @@ public:
             temp = temp->next;
         }
         cout << endl;
+        // cout << "List is empty";
     }
 };
 
@@ -101,11 +115,13 @@ public:
     // deletes item from the stack
     void pop()
     {
+        list.deleteTail();
     }
 
     // checks if the stack is empty or not
     bool isEmpty()
     {
+        return list.isEmpty();
     }
 
     // checks if the stack is full or not
@@ -125,12 +141,31 @@ private:
     Stack stack;
 
 public:
-    void push(string input)
+    bool balancedParentheses(string input)
     {
+        bool isListEmpty = false;
         for (char c : input)
         {
-            stack.push(c);
+            if (c == '(')
+            {
+                stack.push(c);
+            }
+            else if (c == ')')
+            {
+                if (stack.isEmpty())
+                {
+                    return false;
+                }
+                stack.pop();
+            }
+            // stack.push(c);
         }
+        return stack.isEmpty();
+    }
+
+    void pop()
+    {
+        stack.pop();
     }
 
     void display()
@@ -145,39 +180,49 @@ void getInput()
     bool stop = false;
     string input;
     string shouldContinue;
-    StackParenthesesChecker stackParenthesesChecker;
 
     while (!stop)
     {
-        LinkedList list;
 
+        cout << "\nThis program checks whether the input parentheses are balanced or not.\n";
         cout << "Enter a number of brackets: ";
         cin >> input;
         cout << "Your input is " << input << endl;
 
-        stackParenthesesChecker.push(input);
+        StackParenthesesChecker stackParenthesesChecker;
+        bool isBalanced = stackParenthesesChecker.balancedParentheses(input);
 
-        stackParenthesesChecker.display();
+        if (isBalanced == true)
+        {
+            cout << "The input has balanced parentheses using Stack" << endl;
+        }
+        else
+        {
+            cout << "The input does not have balanced parentheses using Stack" << endl;
+        }
 
         cout
             << "Do  you want to continue? Yes/No: ";
         cin >> shouldContinue;
 
+        cout << "\n";
+
         transform(shouldContinue.begin(), shouldContinue.end(), shouldContinue.begin(), ::tolower);
 
-        // cout << shouldContinue << endl;
-
-        if (shouldContinue == "yes")
+        if (shouldContinue == "yes" || shouldContinue == "y")
         {
+
             stop = false;
         }
-        else if (shouldContinue == "no")
+        else if (shouldContinue == "no" || shouldContinue == "n")
         {
+
             stop = true;
         }
         else
         {
             cout << "Invalid input. Assuming you want to stop" << endl;
+            stop = true;
         }
     }
 }
