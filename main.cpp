@@ -129,10 +129,10 @@ public:
     void deleteTail()
     {
         Node *temp = tail;
-        if (temp != nullptr)
-        {
-            cout << "tail: " << temp << " temp value: " << temp->value << endl;
-        }
+        // if (temp != nullptr)
+        // {
+        //     cout << "tail: " << temp << " temp value: " << temp->value << endl;
+        // }
 
         if (!isEmpty())
         {
@@ -184,10 +184,23 @@ public:
         return list.isEmpty();
     }
 
-
     void display()
     {
         list.display();
+    }
+
+    // deletes every item from the stack
+    void clearStack()
+    {
+        while (!list.isEmpty()) // ensures that every item from the stack will be deleted until it is empty
+        {
+            pop();
+        }
+    }
+
+    int size()
+    {
+        return list.size();
     }
 };
 
@@ -197,7 +210,7 @@ private:
     Stack stack;
 
 public:
-    bool balancedParentheses(string input)
+    bool balancedParenthesesStack(string input)
     {
         bool isListEmpty = false;
         for (char c : input)
@@ -210,16 +223,19 @@ public:
             {
                 if (stack.isEmpty())
                 {
-                    cout <<"stack is empty" << endl;
+                    // cout << "stack is empty" << endl;
                     return false;
                 }
                 stack.pop();
             }
             // stack.push(c);
         }
-        return stack.isEmpty();
+        isListEmpty = stack.isEmpty();
+        stack.clearStack();
+        return isListEmpty;
     }
 
+    // deletes the single item from the stack
     void pop()
     {
         stack.pop();
@@ -258,8 +274,28 @@ public:
     // checks whether the queues are empty or not
     bool isQueueEmpty()
     {
-        // cout << "Queue values: " << list1.nodes << endl;
+        // cout << "lis1.nodes: " << list1.nodes << "\nlist2.nodes: " << list2.nodes << endl;
         return list1.isEmpty() && list2.isEmpty();
+    }
+
+    // delete every item from the queue
+    void clearQueue()
+    {
+        while (!list1.isEmpty() || !list2.isEmpty())
+        { // will delete every item until the both queue list is cleared
+            list1.deleteAtHead();
+            list2.deleteAtHead();
+        }
+    }
+
+    int sizeOfList1()
+    {
+        return list1.size();
+    }
+
+    int sizeOfList2()
+    {
+        return list2.size();
     }
 
     void displayList()
@@ -280,8 +316,9 @@ public:
         the second queue and returns true if there is no element in both queues otherwise returns false
         if there is still element left in either first or second queues
     */
-    bool balancedQueueParenthesesChecker(string input)
+    bool balancedParenthesesQueue(string input)
     {
+        bool isListEmpty = false;
         for (char singleBracket : input)
         {
             if (singleBracket == '(') // adds the bracket in the first queue
@@ -294,10 +331,12 @@ public:
                 {
                     return false;
                 }
-                cout << queue.dequeue() << " got deleted" << endl;
+                queue.dequeue();
             }
         }
-        return queue.isQueueEmpty(); // checks if the queue is empty or not, if empty then balanced parentheses
+        isListEmpty = queue.isQueueEmpty();
+        queue.clearQueue();
+        return isListEmpty;
     }
 
     void display()
@@ -312,29 +351,47 @@ void getInput()
     bool stop = false;
     string input;
     string shouldContinue;
+    StackParenthesesChecker stackParenthesesChecker;
+    QueueParenthesesChecker queueParenthesesChecker;
 
     while (!stop)
     {
+        bool validInput = false;
+        while (!validInput)
+        {
+            cout << "\nThis program checks whether the input parentheses are balanced or not.\n";
+            cout << "Enter a number of brackets: ";
+            cin >> input;
+            cout << "\nYour input is " << input << endl;
 
-        cout << "\nThis program checks whether the input parentheses are balanced or not.\n";
-        cout << "Enter a number of brackets: ";
-        cin >> input;
-        cout << "Your input is " << input << endl;
+            validInput = true;
 
-        StackParenthesesChecker stackParenthesesChecker;
-        bool isBalancedStack = stackParenthesesChecker.balancedParentheses(input);
+            for (char i : input){
+                if (i != '(' && i != ')'){
+                    validInput = false;
+                    break;
+                }
+            }
 
-        QueueParenthesesChecker queueParenthesesChecker;
-        bool isBalancedQueue = queueParenthesesChecker.balancedQueueParenthesesChecker(input);
-        queueParenthesesChecker.display();
+            if (!validInput){
+                cout << "\nInvalid input! Please enter only '(' or ')' characters.\n";
+            }
+        }
+
+        bool isBalancedStack = stackParenthesesChecker.balancedParenthesesStack(input);
+        bool isBalancedQueue = queueParenthesesChecker.balancedParenthesesQueue(input);
+        // queueParenthesesChecker.display();
+
+        // cout <<"\n isBalancedStack: " << isBalancedStack << endl;
+        // cout << "\n isBalancedQueue: " << isBalancedQueue << endl;
 
         if (isBalancedStack == true && isBalancedQueue == true)
         {
-            cout << "The input has balanced parentheses using Stack and Queue" << endl;
+            cout << "\nThe input has balanced parentheses using Stack and Queue" << endl;
         }
         else
         {
-            cout << "The input does not have balanced parentheses using Stack and Queue" << endl;
+            cout << "\nThe input does not have balanced parentheses using Stack and Queue" << endl;
         }
 
         cout
@@ -365,27 +422,32 @@ void getInput()
 
 int main()
 {
-    // getInput();
-    StackParenthesesChecker stackParenthesesChecker;
-    QueueParenthesesChecker queueParenthesesChecker;
+    getInput();
 
-    string input = "()(()))()()";
+    // StackParenthesesChecker stackParenthesesChecker;
+    // QueueParenthesesChecker queueParenthesesChecker;
 
-    bool isBalancedStack = stackParenthesesChecker.balancedParentheses(input);
-    bool isBalancedQueue = queueParenthesesChecker.balancedQueueParenthesesChecker(input);
+    // string input = "()(()))()()";
 
-    if (isBalancedStack == true)
-    {
-        cout << "Parentheses are balanced using Stack " <<input << endl;
-    }else{
-        cout << "Parentheses are not balanced using Stack " <<input << endl;
-    }
-    if (isBalancedQueue)
-    {
-        cout << "parentheses are balanced using Queue " <<input  << endl;
-    }else {
-        cout << "parentheses are not balanced using queue " <<input << endl;
-    }
+    // bool isBalancedStack = stackParenthesesChecker.balancedParentheses(input);
+    // bool isBalancedQueue = queueParenthesesChecker.balancedQueueParenthesesChecker(input);
+
+    // if (isBalancedStack == true)
+    // {
+    //     cout << "Parentheses are balanced using Stack " << input << endl;
+    // }
+    // else
+    // {
+    //     cout << "Parentheses are not balanced using Stack " << input << endl;
+    // }
+    // if (isBalancedQueue)
+    // {
+    //     cout << "parentheses are balanced using Queue " << input << endl;
+    // }
+    // else
+    // {
+    //     cout << "parentheses are not balanced using queue " << input << endl;
+    // }
 
     return 0;
 }
