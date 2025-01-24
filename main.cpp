@@ -44,7 +44,11 @@ public:
         return this->nodes == 0;
     }
 
-    // for stack
+
+    /*
+        This method creates a new node and adds the node at the head of the linked list,
+        this method is used by stack class to mimic the stack behaviour of adding the new element at top
+    */
     void insertAtHead(char singleBracket)
     {
         Node *newNode = new Node(singleBracket);
@@ -62,38 +66,18 @@ public:
         nodes++;
     }
 
-    // adds a new node in the last of the linked list
-    void insertTail(char singleBracket)
-    {
-
-        Node *newNode = new Node(singleBracket);
-        if (size() == 0)
-        {
-
-            head = newNode;
-            tail = newNode;
-        }
-        else
-        {
-
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = newNode;
-        }
-        nodes++;
-    }
 
     // adds a new node at the last of the linked list, for queue
     void insertAtLast(char singleBracket)
     {
         // cout << "this item going to be inserted at second list: " << singleBracket << endl;
         Node *newNode = new Node(singleBracket);
-        if (size() == 0)
+        if (size() == 0)  // if we have no items in the linked list
         {
             head = newNode;
             tail = newNode;
         }
-        else
+        else 
         {
             newNode->prev = tail;
             tail->next = newNode;
@@ -102,7 +86,10 @@ public:
         nodes++;
     }
 
-    // deletes the item that was added at first, for queue
+    
+    /*
+        This method helps to delete the first node from the linked list and returns the value of the deleted node
+    */
     char deleteAtHead()
     {
         if (!isEmpty()) // if we have more or equal to one item in the list we delete
@@ -110,7 +97,7 @@ public:
             Node *temp = head;
             char value = temp->value;
 
-            if (size() > 1)
+            if (size() > 1)  // if the linked list have more than one item 
             {
                 temp->next->prev = nullptr;
                 head = temp->next;
@@ -125,27 +112,8 @@ public:
         }
     }
 
-    // removes the most recent node added in the list, which is the last node
-    void deleteTail()
-    {
-        Node *temp = tail;
-        // if (temp != nullptr)
-        // {
-        //     cout << "tail: " << temp << " temp value: " << temp->value << endl;
-        // }
 
-        if (!isEmpty())
-        {
-            if (nodes > 1)
-            {
-                temp->prev->next = nullptr;
-                tail = temp->prev;
-            }
-            delete temp;
-            nodes--;
-        }
-    }
-
+    //  prints out the list's item
     void display()
     {
         Node *temp = head;
@@ -165,7 +133,11 @@ private:
     LinkedList list;
 
 public:
-    // adds item on the stack
+    
+    /*
+        This method adds the item on the first of linked list just like a stack, the first added element is at the last,
+        like wise the first added element will be at the last of the linked list.
+    */
     void push(char singleBracket)
     {
         // list.insertTail(singleBracket);
@@ -184,6 +156,7 @@ public:
         return list.isEmpty();
     }
 
+    // prints out the item from the stack list
     void display()
     {
         list.display();
@@ -198,6 +171,7 @@ public:
         }
     }
 
+    // provides the number of elements in the stack
     int size()
     {
         return list.size();
@@ -209,7 +183,13 @@ class StackParenthesesChecker
 private:
     Stack stack;
 
+
 public:
+ /*
+    this method if the input is '(', adds at head in stack list and deletes the most recently added '(' if the input is
+    ')'. And lastly checks if the stack or linked list has any item left. If the list has item left then the user has
+    provided unbalanced parenthese or else the input provided by user has balanced parentheses. 
+ */
     bool balancedParenthesesStack(string input)
     {
         bool isListEmpty = false;
@@ -241,7 +221,8 @@ public:
         stack.pop();
     }
 
-    void display()
+    // prints out every elements from the stack list
+    void display()  
     {
         stack.display();
     }
@@ -254,13 +235,23 @@ private:
     LinkedList list1, list2;
 
 public:
-    // adds the item in the queue
+
+    /*
+        This method adds the item at the last of the linked list, just like in queue the first added item is shown at first
+        this method puts the items in a way that the first added is shown first and second added is shown second and vice-versa.
+    */
     void enque(char singleBracket)
     {
         list1.insertAtLast(singleBracket);
     }
 
-    // removes the first added item from the queue
+    /*
+        This method deletes the first element from the queue and returns the deleted value and put it to the first
+        of second queue, delets the second element from the first queue and returns the value and put it to the second 
+        of the second queue. This method mimics the behaviour of Queue. This method follows the Firs In First Out as it
+        deletes the first item that was added first.  
+
+    */
     char dequeue()
     {
         while (!list1.isEmpty()) // checking whether we have items in our first queue or not
@@ -288,16 +279,19 @@ public:
         }
     }
 
+    // returns the size of the linked list1
     int sizeOfList1()
     {
         return list1.size();
     }
 
+    // returns the size of the linked list2
     int sizeOfList2()
     {
         return list2.size();
     }
 
+    // prints out the element inside the list1
     void displayList()
     {
         list1.display();
@@ -335,15 +329,23 @@ public:
             }
         }
         isListEmpty = queue.isQueueEmpty();
-        queue.clearQueue();
+        queue.clearQueue(); // clearing the queue after checking whether the input has balanced parentheses or not
         return isListEmpty;
     }
 
+    // this method displays the items from the queue
     void display()
     {
         queue.displayList();
     }
 };
+
+/*
+    This method checks if the input provided by the user is valid or not, if it is valid than it will call another method to
+    check if the parentheses are balanced or not. If it is invalid it will asks the user to provide valid input until the user
+    provides it. This method also displays whether the input have balanced paretheses or not. This method will run until user
+    terminates the program.
+*/
 
 void getInput()
 {
@@ -354,10 +356,11 @@ void getInput()
     StackParenthesesChecker stackParenthesesChecker;
     QueueParenthesesChecker queueParenthesesChecker;
 
+    // program will run until user wants to terminate
     while (!stop)
     {
         bool validInput = false;
-        while (!validInput)
+        while (!validInput) // loop to ask user for valid input
         {
             cout << "\nThis program checks whether the input parentheses are balanced or not.\n";
             cout << "Enter a number of brackets: ";
@@ -366,45 +369,49 @@ void getInput()
 
             validInput = true;
 
-            for (char i : input){
-                if (i != '(' && i != ')'){
+            // using for loop to go through user input to check if it contains valid input
+            for (char i : input)
+            {
+                if (i != '(' && i != ')')
+                {
                     validInput = false;
                     break;
                 }
             }
 
-            if (!validInput){
+            // display invalid message it the user input is invalid
+            if (!validInput)
+            {
                 cout << "\nInvalid input! Please enter only '(' or ')' characters.\n";
             }
         }
 
         bool isBalancedStack = stackParenthesesChecker.balancedParenthesesStack(input);
         bool isBalancedQueue = queueParenthesesChecker.balancedParenthesesQueue(input);
-        // queueParenthesesChecker.display();
 
-        // cout <<"\n isBalancedStack: " << isBalancedStack << endl;
-        // cout << "\n isBalancedQueue: " << isBalancedQueue << endl;
-
+        // if both the stack and queue parentheses checker returns true then
         if (isBalancedStack == true && isBalancedQueue == true)
         {
             cout << "\nThe input has balanced parentheses using Stack and Queue" << endl;
         }
-        else
+        else // if either one or both stack and queue parentheses checker returns false then
         {
             cout << "\nThe input does not have balanced parentheses using Stack and Queue" << endl;
         }
 
+        // asking user wheter the program should be continue or not
         cout
             << "Do  you want to continue? Yes/No: ";
         cin >> shouldContinue;
 
         cout << "\n";
 
+        // converting the user input for continuation of program into lower case
         transform(shouldContinue.begin(), shouldContinue.end(), shouldContinue.begin(), ::tolower);
 
+        // if user types yes or y or YES the program will run or else it will stop
         if (shouldContinue == "yes" || shouldContinue == "y")
         {
-
             stop = false;
         }
         else if (shouldContinue == "no" || shouldContinue == "n")
@@ -412,7 +419,7 @@ void getInput()
 
             stop = true;
         }
-        else
+        else // if the user types anything other than yes or no program will terminate
         {
             cout << "Invalid input. Assuming you want to stop" << endl;
             stop = true;
@@ -423,31 +430,5 @@ void getInput()
 int main()
 {
     getInput();
-
-    // StackParenthesesChecker stackParenthesesChecker;
-    // QueueParenthesesChecker queueParenthesesChecker;
-
-    // string input = "()(()))()()";
-
-    // bool isBalancedStack = stackParenthesesChecker.balancedParentheses(input);
-    // bool isBalancedQueue = queueParenthesesChecker.balancedQueueParenthesesChecker(input);
-
-    // if (isBalancedStack == true)
-    // {
-    //     cout << "Parentheses are balanced using Stack " << input << endl;
-    // }
-    // else
-    // {
-    //     cout << "Parentheses are not balanced using Stack " << input << endl;
-    // }
-    // if (isBalancedQueue)
-    // {
-    //     cout << "parentheses are balanced using Queue " << input << endl;
-    // }
-    // else
-    // {
-    //     cout << "parentheses are not balanced using queue " << input << endl;
-    // }
-
     return 0;
 }
